@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+
+
+
+
+<nav class="alert alert-danger">
+    <ul class="nav nav-pills">
+        <li role="presentation" ><a href="/home">Home</a></li>
+        <li shiro:guest role="presentation" ><a th:href="@{/toLogin}">请登录</a></li>
+        <li role="presentation">
+            <a th:href="@{/logout}">注销</a></li>
+        <li role="presentation"><a href="/trans">交易记录</a></li>
+        <li role="presentation"><a th:href="@{/user/add}">开户</a>
+        <li role="presentation"><a href="/cun">存款</a></li>
+        <li role="presentation"><a href="#">取款</a></li>
+
+
+        <li role="presentation"><a href="#">vip</a></li>
+
+        <li shiro:hasPermission="vip5" role="presentation"><a href="#">花呗</a></li>
+        <li shiro:hasPermission="vip5" role="presentation"><a href="#">花呗还款</a></li>
+        <li shiro:hasPermission="vip5" role="presentation"><a href="#">花呗信息</a></li>
+
+
+    </ul>
+</nav>
+
+<div class="container" >
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="page-header">
+                <h1>
+                    <small>[[${session.loginUser}]]用户————信息展示</small></h1>
+            </div></div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>银行卡号</th><th>交易日期</th><th>交易金额</th><th>余额</th></tr>
+                </thead>
+
+                <tbody>
+
+                <tr>
+
+                    <td th:each="user:${me1}" th:text="${user}"></td>
+
+
+                </tr>
+
+
+                </tbody>
+            </table></div>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

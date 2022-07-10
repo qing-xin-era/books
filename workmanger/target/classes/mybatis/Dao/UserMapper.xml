@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qing.Dao.UserMapper">
+
+<resultMap id="mapper" type="User">
+    <result column="id" property="id"/>
+    <result column="name" property="name"/>
+    <result column="pwd" property="pwd"/>
+    <result column="perms" property="perms"/>
+</resultMap>
+    <select id="queryUserList" resultMap="mapper">
+        select * from xin_02.user
+    </select>
+
+
+    <select id="queryUserByName" resultType="User">
+        select * from xin_02.user where name = #{name}
+    </select>
+
+
+
+    <select id="queryUserById" resultMap="TeacherStudent">
+        select s.id , s.name , s.pwd,c.cnumber,d.dtransaction ,d.ddate,d.dsurplus ,o.otransaction,
+               o.odate, o.osurplus,r.rtransaction,r.rtransactionr_term ,r.rdate from
+                                                                                    xin_02.user s,xin_02.card c,xin_02.deposit_draw_record d ,xin_02.overdraft_record o,xin_02.repayment_record r
+        where s.id = c.cout and  c.cid=d.dout   and  c.cid=o.oout  and c.cid=r.rout and  c.cnumber = #{id}
+    </select>
+
+    <resultMap id="TeacherStudent" type="User">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pwd" property="pwd"/>
+        <result column="perms" property="perms"/>
+        <collection property="trans" ofType="TransactionRecord">
+
+            <result property="cnumber" column="cnumber" />
+            <result property="dtransaction" column="dtransaction" />
+            <result property="ddate" column="ddate" />
+            <result property="dsurplus" column="dsurplus" />
+
+            <result property="otransaction" column="otransaction" />
+            <result property="odate" column="odate" />
+            <result property="osurplus" column="osurplus" />
+
+            <result property="rtransactionr_term" column="rtransactionr_term" />
+            <result property="rtransaction" column="rtransaction" />
+            <result property="rdate" column="rdate" />
+        </collection>
+    </resultMap>
+
+
+
+
+
+
+
+
+
+
+
+    <insert id="addUser" parameterType="User">
+    insert into xin_02.user (id,name , pwd) values (#{id} , #{name}, #{pwd})
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+    update xin_02.user set name=#{name} , pwd=#{pwd} ,perms=#{perms} where id = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="int">
+       delete from xin_02.user where id =#{id}
+    </delete>
+
+</mapper>
+        <!--
+                 一对多
+
+                 <select id="getstudent" resultMap="StudentTeacher">
+                    select  * from student
+                 </select>
+                 <resultMap id="studentTeacher" type="Student">
+                   <result property="id" column="id" />
+                   <result property="name" column="name"/>
+                复杂的属性，我们需要单独处理对象: association集合: collection
+               <association property="teacher" column="tid" javaType="Teacher" select="getTeacher" />
+             </resultMap>
+             <select id="getTeacher" resultType="Teacher">
+                 select* from teacher where id = #{tid}
+             </select>
+            -->
+
+
+
+        <!--
+                     按照结果嵌套处理
+<select id="getStudent2" resultMap="StudentTeacher2">
+select s.id sid,s.name sname,t.name tname
+from student s,teacher t
+where s.tid = t.id;
+< / select>
+<resultMap id="StudentTeacher2" type="Student">
+    <result property="id" column="sid" />
+    <result property="name" tolumn=" sname" / >
+    <association property="teacher" javaType="Teacher">
+        <result property="name" column="tname" / >
+        < / association>
+    </resu1tMap>
+
+    -->

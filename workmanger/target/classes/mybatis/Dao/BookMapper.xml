@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qing.Dao.BookMapper">
+<!-- 查询全部书籍-->
+<resultMap id="mapper" type="Books">
+    <result column="bookID" property="bookID"/>
+    <result column="bookName" property="bookName"/>
+    <result column="bookCounts" property="bookCounts"/>
+    <result column="detail" property="detail"/>
+</resultMap>
+    <select id="queryAllBook" resultMap="mapper">
+        select * from xin_02.books
+    </select>
+
+
+    <!-- 查询书籍通过id
+    <select id="queryAllBook" resultType="Books">
+        select * from xin_02.books
+    </select>
+    -->
+
+    <!-- 查询书籍通过id-->
+    <select id="queryBookById" resultType="Books">
+        select * from xin_02.books where bookID = #{bookID}
+    </select>
+
+    <!-- 添加书籍-->
+    <insert id="addBook" parameterType="Books">
+        insert into xin_02.books(bookID, bookName, bookCounts, detail) values (#{bookID} , #{bookName}, #{bookCounts},#{detail})
+    </insert>
+    <select id="queryBookByName" resultType="Books">
+        select * from xin_02.books where bookName = #{bookName}
+    </select>
+
+    <!-- 更新书籍-->
+    <update id="updateBook" parameterType="Books">
+        update xin_02.books  set bookName=#{bookName} , bookCounts=#{bookCounts} ,detail=#{detail} where bookID = #{bookID}
+    </update>
+    <!-- 删除书籍-->
+    <delete id="deleteBookById" parameterType="int">
+        delete from xin_02.books where bookID =#{bookID}
+    </delete>
+
+
+
+
+
+
+</mapper>
+        <!--
+                 一对多
+
+                 <select id="getstudent" resultMap="StudentTeacher">
+                    select  * from student
+                 </select>
+                 <resultMap id="studentTeacher" type="Student">
+                   <result property="id" column="id" />
+                   <result property="name" column="name"/>
+                复杂的属性，我们需要单独处理对象: association集合: collection
+               <association property="teacher" column="tid" javaType="Teacher" select="getTeacher" />
+             </resultMap>
+             <select id="getTeacher" resultType="Teacher">
+                 select* from teacher where id = #{tid}
+             </select>
+            -->
+
+
+
+        <!--
+                     按照结果嵌套处理
+<select id="getStudent2" resultMap="StudentTeacher2">
+select s.id sid,s.name sname,t.name tname
+from student s,teacher t
+where s.tid = t.id;
+< / select>
+<resultMap id="StudentTeacher2" type="Student">
+    <result property="id" column="sid" />
+    <result property="name" tolumn=" sname" / >
+    <association property="teacher" javaType="Teacher">
+        <result property="name" column="tname" / >
+        < / association>
+    </resu1tMap>
+
+    -->
